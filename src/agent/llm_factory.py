@@ -86,9 +86,9 @@ class GoogleAILLMs:
 
 class ChatOpenRouterProvider:
     def __init__(self, temperature: int = 0, model: Optional[str] = None):
-        model_name = model or os.environ.get("OPENROUTER_MODEL")
-        key = os.environ.get("OPENROUTER_API_KEY")
-        base_url = os.environ.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+        model_name = model or os.environ['OPENROUTER_MODEL']
+        key = os.environ['OPENROUTER_API_KEY']
+        base_url = os.environ['OPENROUTER_BASE_URL']
 
         self._openrouter_llm = ChatOpenAI(
             model=model_name,
