@@ -1,4 +1,4 @@
-from src.agent.llm_factory import OpenAILLMs
+from src.agent.llm_factory import ChatOpenRouterProvider
 from src.agent.prompts import \
     role_prompt, conv_pref_prompt, update_conv_pref_prompt, summary_prompt, update_summary_prompt, summary_system_prompt
 
@@ -29,9 +29,9 @@ class State(TypedDict):
 class BaseAgent:
     def __init__(self):
         # Main chat LLM — change to GoogleAILLMs(), AzureLLMs(), or OllamaLLMs() if preferred
-        self.llm = OpenAILLMs().get_llm()
+        self.llm = ChatOpenRouterProvider().get_llm()
         # Summarisation LLM — can be set to a different/cheaper model than the chat LLM
-        self.summarisation_llm = OpenAILLMs().get_llm()
+        self.summarisation_llm = ChatOpenRouterProvider().get_llm()
 
         self.max_messages_to_summarize = 11
         self.role_prompt = role_prompt

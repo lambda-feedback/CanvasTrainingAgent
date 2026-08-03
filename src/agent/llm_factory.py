@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from langchain_openai import AzureChatOpenAI
 from langchain_openai import AzureOpenAIEmbeddings
@@ -82,3 +83,32 @@ class GoogleAILLMs:
 
     def get_llm(self):
         return self._google_llm
+
+class ChatOpenRouterProvider:
+    def __init__(self, temperature: int = 0, model: Optional[str] = None, api_key: Optional[str] = None):
+        model_name = model or os.environ.get("OPENROUTER_MODEL")
+        key = api_key or os.environ.get("OPENROUTER_API_KEY")
+
+        if not key:
+            raise ValueError("OpenRouter API key not found. Please add OPENROUTER_API_KEY to your .env file.")
+
+        base_url = os.environ.get("OPENROUTER_BASE_URL", "https://openrouter.ai/api/v1")
+
+        default_headers = {}
+        site_url = os.environ.get("OPENROUTER_SITE_URL")
+        app_name = os.environ.get("OPENROUTER_APP_NAME")
+        if site_url:
+            default_headers["HTTP-Referer"] = site_url
+        if app_name:
+            default_headers["X-Title"] = app_name
+
+        self._openrouter_llm = ChatOpenAI(
+            model=model_name,
+            temperature=temperature,
+            api_key=key,
+            base_url=base_url,
+            default_headers=default_headers or None,
+        )
+
+    def get_llm(self):
+        return self._openrouter_llm
